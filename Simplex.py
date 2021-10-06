@@ -58,13 +58,13 @@ def isOptimal(t,m):
     else: #min, count positive values
         return sum(1 for i in t[-1][:-1] if i<0)==0
 
-def findPivot(t,m):
-    optimal = isOptimal(t,m)
-    pc,pr = None,None
+def findPivot(t, m):
+    optimal = isOptimal(t, m)
+    pc, pr = None, None
     if not optimal:
         val, pc = min((val, idx) for (idx, val) in enumerate(t[-1][:-1]))
-        val, pr = min((val, idx) for (idx, val) in enumerate([float('inf') if xx is None or xx<=0 else xx for xx in [None if r[pc]==0 else r[-1]/r[pc] for r in t]]))
-    return pc,pr
+        val, pr = min((val, idx) for (idx, val) in enumerate([float('inf') if xx is None or xx < 0 else xx for xx in [float('inf') if r[pc] <= 0 else r[-1] / r[pc] for r in t]]))
+    return pc, pr
         
 def printTableau(t,bv,xs,z,m=0,pc=None,pr=None):
     heads = ['x_'+str(i+1) for i in range(len(z))] + ['S_'+str(i+1) for i in range(len(xs))]
