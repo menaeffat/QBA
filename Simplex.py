@@ -67,22 +67,22 @@ def findPivot(t, m):
     return pc, pr
         
 def printTableau(t,bv,xs,z,m=0,pc=None,pr=None):
+    cw = 5
     heads = ['x_'+str(i+1) for i in range(len(z))] + ['S_'+str(i+1) for i in range(len(xs))]
     
     if not pc is None:
-        print(" ", " "*(10 + pc*6) + "↓")
+        print(" ", " "*(8+ int(cw/2) + pc*(cw+1)) + "↓")
         
-        
-    header = ' BV    | ' + ' | '.join(heads) + ' | RHS  '
+    header = ' '*3+"BV" +' '*2 + '|' + '|'.join([h.center(cw) for h in heads]) + '| RHS' + ' '*2
     print(" ", header)
     hr = ''.join(["|" if i=="|" else "-" for i in header])
     print(" ", hr)
     for i in range(len(xs)):
-        row = '{0}) {1} |'.format(i+1,heads[bv[i]]) + "|".join([str(x).center(5) for x in t[i]])
+        row = '{0}) {1} |'.format(i+1,heads[bv[i]]) + "|".join([("{0:.2f}".format(x) if type(x) is float and int(x)!=x else str(int(x))).center(cw) for x in t[i]])
         print(" " if (pr is None or pr!=i) else "→" , row)
 
     print(" ", hr)
-    Z_row = "    Z  |" + "|".join([str(x).center(5) for x in t[-1]])
+    Z_row = " "*4 + "Z" + " "*2 + "|" + "|".join([("{0:.2f}".format(x) if type(x) is float and int(x)!=x else str(int(x))).center(cw) for x in t[-1]])
     print(" ", Z_row)
     print(" ", ''.join(["|" if i=="|" else "=" for i in hr]))
 
@@ -121,7 +121,7 @@ def printStatus(t,bv,m):
     for i in range(len(bv)):
         vals[bv[i]] = t[i][-1]
     vals[-1] = t[-1][-1]
-    print("\t".join([heads[i] + " = " + str(vals[i]) for i in range(len(heads))]))
+    print("\t".join([heads[i] + " = " + ("{0:.2f}".format(vals[i]) if type(vals[i]) is float and int(vals[i])!=vals[i] else str(int(vals[i]))) for i in range(len(heads))]))
     
 t,bv = createTableau(xs,z)
 optimal = False
@@ -133,4 +133,4 @@ while not optimal:
     if not optimal:
         bv[pr] = pc
         t = iterate(t,bv,pc,pr)
-
+        
